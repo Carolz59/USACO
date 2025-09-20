@@ -1,2 +1,2 @@
-# USACO
-some usaco probs i did
+# competitive programming
+some probs i did
