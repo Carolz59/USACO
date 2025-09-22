@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    int h;
+    vector<int>hats;
+    for(int i=0;i<n;i++){
+        cin>>h;
+        hats.push_back(h);
+    }
+    int half=n/2;
+    int cnt=0;
+
+    for (int i=0;i<n/2;i++){
+        if (hats[i]==hats[i+half]){
+            cnt+=2;
+        }
+    }
+
+    cout<<cnt;
+}
