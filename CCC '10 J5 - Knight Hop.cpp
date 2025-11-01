@@ -60,5 +60,6 @@ int main(){
     fy--;
     cout<<bfs(sx,sy,fx,fy);
     return 0;
+    
 
 }
