@@ -1,71 +1,67 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool amimentallystable=false;
 
-bool bfs(int x,int y, const vector<vector<int>>&grid){
-    vector<vector<bool>>visited(y+1,vector<bool>(x+1,false));
+int n,m;
+unordered_map<int,queue<pair<int,int>>>valtopos;
+vector<vector<bool>>visited;
+
+bool find(){
     queue<pair<int,int>>q;
-
-    q.push({1,1});
-    visited[1][1]=true;
+    q.push({n,m});
+    visited[n][m]=true;
 
     while (!q.empty()){
         auto cur=q.front();
+        int f=cur.first;
+        int s=cur.second;
+        if (f==1&&s==1){
+            return true;
+        }
         q.pop();
-
-        int num=grid[cur.first][cur.second];
-
-        if (cur.first==y&&cur.second==x) {
-            return true; // get out bro
-        }
-
-        for (int i=1;i*i<=num;i++){//find the factor
-            if(num%i==0){
-                int j=num/i;
-
-                if (i<=y&&j<=x&&!visited[i][j]){
-                    q.push({i,j});
-                    visited[i][j]=true;
+        int target=f*s;
+        if(valtopos.count(target)){
+            while(!valtopos[target].empty()){
+                auto loc=valtopos[target].front();
+                if (!visited[loc.first][loc.second]){
+                    q.push({loc.first,loc.second});
+                    visited[loc.first][loc.second]=true;
+                    valtopos[target].pop();
+                }else{
+                    valtopos[target].pop();
                 }
-
-                if (i<=x&&j<=y&&!visited[j][i]){
-                    q.push({j,i});
-                    visited[j][i]=true;
-                }
-                
-
             }
+            valtopos.erase(target);
+
+
 
         }
-
-
-        
-        
     }
     return false;
-
-
-
 }
 
 int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cin>>n>>m;
+    visited.assign(n+1,vector<bool>(m+1,false));
 
-    int x,y;
-    cin>>y>>x;
-
-    vector<vector<int>> grid(y+1,vector<int>(x+1));
-
-    for (int i=1;i<=y;i++){
-        for (int j=1;j<=x;j++){
-            cin>>grid[i][j];
+    for (int i=0;i<n;i++){
+        for (int j=0;j<m;j++){
+            int x;
+            cin>>x;
+            valtopos[x].push({i+1,j+1});
         }
     }
-    if(bfs(x,y,grid)==false){
-        cout<<"no"<<endl;
+
+    if(find()){
+        cout<<"yes";
     }else{
-        cout<<"yes"<<endl;
+        cout<<"no";
     }
+
+
+
+
 
 }
