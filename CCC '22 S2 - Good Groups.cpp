@@ -1,51 +1,58 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool amimentallystable=false;
-
 int main(){
-    int same,diff,group;
-    string p1,p2,p3;
-    vector<pair<string,string>>tog;
-    vector<pair<string,string>>sep;
-    unordered_map<string,int>groups;
-    cin>>same;
-    for (int i=0;i<same;i++){
-        cin>>p1>>p2;
-        tog.push_back(make_pair(p1,p2));
+    int tog,sep,num;
+    cin>>tog;
+    vector<pair<string,string>>map1;
+    map<string,int>group;
+    int cnt=0;
 
+    for (int i=0;i<tog;i++){
+        string x,y;
+        cin>>x>>y;
+        map1.push_back({x,y});
     }
 
-    cin>>diff;
-    for (int i=0;i<diff;i++){
-        cin>>p1>>p2;
-        sep.push_back(make_pair(p1,p2));
+    cin>>sep;
+    vector<pair<string,string>>map2;
 
-    }
-    cin>>group;
-    for (int i=0;i<group;i++){
-        cin>>p1>>p2>>p3;
-        groups[p1]=i;
-        groups[p2]=i;
-        groups[p3]=i;
-
+    for (int i=0;i<sep;i++){
+        string x,y;
+        cin>>x>>y;
+        map2.push_back({x,y});
     }
 
-    int count=0;
+    cin>>num;
 
-    for (auto&u:tog){
-        if(groups[u.first]!=groups[u.second]){
-            count++;
+    for (int i=0;i<num;i++){
+        string x,y,z;
+        cin>>x>>y>>z;
+        group[x]=i;
+        group[y]=i;
+        group[z]=i;
+        
+    }
+    string name1,name2;
+    for (int i=0;i<tog;i++){
+        name1=map1[i].first;
+        name2=map1[i].second;
+
+        if (group[name1]!=group[name2]){
+            cnt++;
         }
     }
 
-    for (auto&u:sep){
-        if(groups[u.first]==groups[u.second]){
-            count++;
+    for (int i=0;i<sep;i++){
+        name1=map2[i].first;
+        name2=map2[i].second;
+
+        if (group[name1]==group[name2]){
+            cnt++;
         }
     }
+    cout<<cnt;
+    
 
-    cout<<count<<endl;
 
 }
