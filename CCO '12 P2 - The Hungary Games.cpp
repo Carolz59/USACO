@@ -1,59 +1,66 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Pair{
-    int x,y;
-    Pair(int _x,int _y):x(_x),y(_y){}
-};
+long long n,m;
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
+vector<vector<pair<long long,long long>>>adj;
+vector<pair<long long,long long>>dist;
 
-    int n,m;
-    cin>>n>>m;
+void kirksdikdik(long long s){
+    dist.assign(n+1,{LLONG_MAX,LLONG_MAX});
+    priority_queue<pair<long long,long long>,vector<pair<long long,long long>>,greater<pair<long long,long long>>>q;
+    q.push({0,s});
+    dist[s].first=0;
 
-    vector<vector<Pair>> adj(n+1);
-    for(int i=0;i<m;i++){
-        int a,b,d;
-        cin>>a>>b>>d;
-        adj[a].push_back(Pair(b,d));
-    }
+    while (!q.empty()){
+        auto [d,n2]=q.top();
+        q.pop();
 
-    vector<array<int,2>> dis(n+1);
-    for(int i=0;i<=n;i++){
-        dis[i][0]=INT_MAX;
-        dis[i][1]=INT_MAX;
-    }
-    dis[1][0]=0;
+        if (dist[n2].second<d){
+            continue;
+        }
 
-    auto cmp=[](const Pair&a,const Pair&b){
-        return a.y>b.y;
-    };
+        for (auto [w,n1]:adj[n2]){
+            long long dis=w+d;
+            if (dis<dist[n1].first){
+                dist[n1].second=dist[n1].first;
+                dist[n1].first=dis;
+                q.push({dis,n1});
 
-    priority_queue<Pair,vector<Pair>,decltype(cmp)> pq(cmp);
-    pq.push(Pair(1,0));
-
-    while(!pq.empty()){
-        Pair p=pq.top();
-        pq.pop();
-        if(p.y>dis[p.x][1]) continue;
-        for(auto nxt:adj[p.x]){
-            int nd=p.y+nxt.y;
-            if(nd<dis[nxt.x][0]){
-                int t=dis[nxt.x][0];
-                dis[nxt.x][0]=nd;
-                dis[nxt.x][1]=t;
-                pq.push(Pair(nxt.x,dis[nxt.x][0]));
-            }else if(nd<dis[nxt.x][1]&&nd!=dis[nxt.x][0]){
-                dis[nxt.x][1]=nd;
-                pq.push(Pair(nxt.x,dis[nxt.x][1]));
+            }else if (dis>dist[n1].first&&dis<dist[n1].second){
+                dist[n1].second=dis;
+                q.push({dis,n1});
             }
         }
     }
 
-    if(dis[n][1]==INT_MAX) cout<<-1<<"\n";
-    else cout<<dis[n][1]<<"\n";
+}
 
-    return 0;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin>>n>>m;
+
+    adj.assign(n+1,vector<pair<long long,long long>>());
+    
+    
+
+    for (int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        adj[a].push_back({c,b});
+
+
+    }
+
+    kirksdikdik(1);
+    if (dist[n].second==LLONG_MAX){
+        cout<<-1;
+        return 0;
+    }
+    cout<<dist[n].second;
+    
+
 }
