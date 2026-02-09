@@ -15,24 +15,19 @@ int main(){
 
     }
 
-    vector<long long>dp(c+1,LLONG_MIN);
+    vector<long long>dp(c+1,0);
     dp[0]=0;
 
     for (int i=0;i<n;i++){
         auto [w,v]=val[i];
         for (int j=c;j>=w;j--){
-            if (j>=w&&dp[j-w]!=LLONG_MIN){
+            if (j>=w){
                 dp[j]=max(dp[j],dp[j-w]+v);
             }
 
         }
     }
-    long long ans=0;
-    for (int i=c;i>=0;i--){
-        if (dp[i]!=LLONG_MIN){
-            ans=max(ans,dp[i]);
-        }
-    }
-    cout<<ans;
+    
+    cout<<dp[c];
     
 }
