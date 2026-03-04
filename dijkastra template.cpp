@@ -4,7 +4,7 @@ using namespace std;
 int n;
 vector<int>dist(n+1);
 vector<bool>visited(n+1,false);
-vector<vector<pair<int,int>>>adj(n+1); //weight,node
+vector<vector<pair<int,int>>>adj(n+1); //adj[u]={weight,v}
 
 void dik(int s){
     dist[s]=0;
