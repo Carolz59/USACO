@@ -1,0 +1,123 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m,k;
+vector<vector<int>>adj,top,res;
+vector<bool>need;
+queue<int>q;
+
+vector<int>indeg;
+
+void bfs(){
+    while(!q.empty()){
+        int cur=q.front();
+        q.pop();
+        need[cur]=true;
+        for (auto u:adj[cur]){
+            if(!need[u]){
+                need[u]=true;
+                q.push(u);
+            }
+        }
+        
+    }
+    
+}
+
+void topolo(){
+    queue<int>qt;
+    
+    for (int i=1;i<=n;i++){
+        if(indeg[i]==0&&need[i]){
+            
+            qt.push(i);
+        }
+    }
+    
+    while (!qt.empty()){
+        int sz=qt.size();
+        vector<int>temp;
+        for(int i =0;i<sz;i++){
+            int cur=qt.front();
+            qt.pop();
+            temp.push_back(cur);
+
+            for (auto u:top[cur]){
+                if (need[u]){
+                    indeg[u]--;
+                    if (indeg[u]==0){
+                        qt.push(u);
+                    }
+                }
+            }
+            
+            
+        }
+        sort(temp.begin(),temp.end());
+        res.push_back(temp);
+    }
+
+    
+
+    
+}
+
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin>>n>>m>>k;
+    adj.assign(n+1,vector<int>());
+    top.assign(n+1,vector<int>());
+    indeg.assign(n+1,0);
+    need.assign(n+1,false);
+    vector<int>mand(k);
+
+    for (int i=0;i<k;i++){
+        cin>>mand[i];
+        q.push(mand[i]);
+    }
+
+    for (int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+
+        adj[b].push_back(a);
+        top[a].push_back(b);
+
+    }
+
+    bfs();
+
+    
+
+    for (int i=1;i<=n;i++){
+        if(need[i]){
+            for (auto u:top[i]){
+                if(need[u]){
+                    indeg[u]++;
+                }
+            }
+        }
+    }
+    
+    topolo();
+
+    cout<<res.size()<<endl;
+
+    for (auto u:res){
+        for(auto v:u){
+            cout<<v<<" ";
+        }
+        cout<<endl;
+    }
+
+    
+    
+
+    
+
+    
+    
+}
