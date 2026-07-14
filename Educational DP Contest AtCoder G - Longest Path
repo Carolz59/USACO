@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m;
+vector<vector<int>>adj;
+vector<int>dp;
+
+int dfs(int s){
+    if (dp[s]!=-1){
+        return dp[s];
+    }
+    dp[s]=0;
+
+    for (auto u:adj[s]){
+        dp[s]=max(dp[s],dfs(u)+1);
+    }
+    return dp[s];
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cin>>n>>m;
+    adj.assign(n+1,vector<int>());
+    dp.assign(n+1,-1);
+
+    while (m--){
+        int a,b;
+        cin>>a>>b;
+        adj[a].push_back(b);
+    }
+
+    for (int i=1;i<=n;i++){
+        dfs(i);
+    }
+    cout<<*max_element(dp.begin(),dp.end())<<endl;
+    
+}
