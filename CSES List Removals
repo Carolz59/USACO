@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+long long n;
+vector<long long>seg,v;
+
+void build(long long node,long long l,long long r){
+    if (l==r){
+        seg[node]=1;
+        return;
+    }
+    long long mid=(l+r)/2;
+    build(node*2,l,mid);
+    build(node*2+1,mid+1,r);
+    seg[node]=seg[node*2]+seg[node*2+1];
+}
+
+long long ans;
+void remove(long long node,long long l,long long r,long long p){
+    if (l==r){
+        ans=v[l];
+        seg[node]=0;
+        return;
+    }
+    long long mid=(l+r)/2;
+    if (p<=seg[node*2]){
+        remove(node*2,l,mid,p);
+
+    }else{
+        remove(node*2+1,mid+1,r,p-seg[node*2]);
+    }
+    seg[node]=seg[node*2]+seg[node*2+1];
+
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cin>>n;
+    v.resize(n+1);
+    seg.resize(n*4+4);
+    for (int i=1;i<=n;i++){
+        cin>>v[i];
+    }
+    build(1,1,n);
+    for (int i=1;i<=n;i++){
+        long long r;
+        cin>>r;
+        remove(1,1,n,r);
+        cout<<ans<<" ";
+    }
+
+
+
+}
