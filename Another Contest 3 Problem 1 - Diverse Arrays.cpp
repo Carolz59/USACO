@@ -1,43 +1,38 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    int n,k;
+    long long n,k;
     cin>>n>>k;
-    vector<int>v(n);
+    vector<long long>v(n);
 
     for (int i=0;i<n;i++){
         cin>>v[i];
     }
 
-    int l=0;
-    int r=0;
+    long long l=0;
+    vector<long long>m(n+1,0);
+    long long cnt=0;
+    long long ans=0;
 
-    vector<long long>cnt(n+1,0);
-    int distn=0;
-    long long dists=0;
-
-
-    
-    
-    for (int l=0;l<n;l++){
-        while (r<n&&distn<k){
-            cnt[v[r]]++;
-            if (cnt[v[r]]==1){
-                distn++;
+    for (int r=0;r<n;r++){
+        m[v[r]]++;
+        if (m[v[r]]==1){
+            cnt++;
+            
+        }
+        while (cnt>=k){
+            ans+=n-r;
+            m[v[l]]--;
+            if (m[v[l]]==0){
+                cnt--;
             }
-            r++;
-
-        }
-        if (distn==k){
-            dists+=n-r+1;
-        }
-        cnt[v[l]]--;
-        if (cnt[v[l]]==0){
-            distn--;
+            l++;
         }
     }
-    cout<<dists<<endl;
+    cout<<ans<<endl;
+    
+    
 }
