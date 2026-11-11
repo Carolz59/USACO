@@ -1,12 +1,12 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-int n,m;
+long long n;
+vector<vector<long long>>adj;
 vector<bool>imp;
-vector<vector<int>>adj;
+vector<long long>dist;
 
-bool prune(int u,int p){
-
+bool prune(long long u,long long p){
     for (auto v:adj[u]){
         if (v==p){
             continue;
@@ -16,81 +16,71 @@ bool prune(int u,int p){
         }
     }
     return imp[u];
-
 }
-
-vector<int>dist;
-pair<int,int> dia(int p){
-    dist.assign(n,-1);
-    dist[p]=0;
-    queue<int>q;
-    q.push(p);
-    int fardist=0;
-    int farnode=p;
-
+long long far,node;
+void bfs(long long u){
+    dist[u]=0;
+    node=u;
+    far=0;
+    queue<long long>q;
+    q.push(u);
     while (!q.empty()){
-        int node=q.front();
+        long long u=q.front();
         q.pop();
-        
 
-        for (auto ch:adj[node]){
-            if (dist[ch]==-1&&imp[ch]){
-                dist[ch]=dist[node]+1;
-                q.push(ch);
-
-                if (dist[ch]>fardist){
-                    fardist=dist[ch];
-                    farnode=ch;
-
+        for (auto v:adj[u]){
+            if (imp[v]&&dist[v]==-1){
+                q.push(v);
+                dist[v]=dist[u]+1;
+                if (dist[v]>far){
+                    far=dist[v];
+                    node=v;
                 }
+
             }
-            
         }
-        
     }
-    return make_pair(fardist,farnode);
 }
+
+
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    cin>>n>>m;
-    adj.assign(n,vector<int>());
+    cin>>n;
+    long long m;
+    cin>>m;
+    adj.assign(n,vector<long long>());
+    dist.assign(n,-1);
     imp.assign(n,false);
-
-    int use;
-    for (int i=0;i<m;i++){
-        int ph;cin>>ph;
-        imp[ph]=true;
-        use=ph;
+    long long use;
+    while(m--){
+        long long z;
+        cin>>z;
+        imp[z]=true;
+        use=z;
     }
 
-    for (int i=0;i<n;i++){
-        int x,y;
-        cin>>x>>y;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
+    for (int i=1;i<n;i++){
+        long long u,v;
+        cin>>u>>v;
+        adj[v].push_back(u);
+        adj[u].push_back(v);
     }
 
     prune(use,-1);
+    bfs(use);
+    dist.assign(n,-1);
+    bfs(node);
+    long long e=-1;
 
-    int edge=0;
-
-    for (int i=0;i<imp.size();i++){
+    for (int i=0;i<n;i++){
         if (imp[i]){
-            edge++;
+            e++;
         }
     }
-    edge--;
 
-    auto [a,b]=dia(use);
-    auto [c,d]=dia(b);
-
-    int ans=2*edge-c;
-
-    cout<<ans;
-
-
+    cout<<2*e-far;
 
 
 
